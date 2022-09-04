@@ -10,8 +10,9 @@ import axios from "axios";
 const Handler = () => {
   const [uploadImageUrl, setUploadImageUrl] = useState("");
   const [isLoading, setIsloadin] = useState(false);
+  const [categoryText, setCategory] = useState("");
 
-  // upload image imagebb 
+  // upload image imagebb
   const uploadImage = async (e) => {
     setIsloadin(true);
     const imagePath = e.target.files[0];
@@ -29,21 +30,29 @@ const Handler = () => {
     }
   };
 
-  // save new product 
-  const addProduct = async(e) => {
+  // save new product
+  const addProduct = async (e) => {
     e.preventDefault();
 
-    const title = e.target.title.value;
-    const price = e.target.price.value;
-    const quantity = e.target.quantity.value;
-    const description = e.target.description.value;
-    const image = uploadImageUrl
+    if (!categoryText || !uploadImageUrl) {
+      alert("please fill right way")
+    } else {
+      const title = e.target.title.value;
+      const price = e.target.price.value;
+      const quantity = e.target.quantity.value;
+      const description = e.target.description.value;
+      const category = categoryText
+      const image = uploadImageUrl;
 
-    const itemObj = { title, price, quantity, description, image }
-    const { data } = await axios.post("http://localhost:3000/api/addproduct", itemObj)
-    console.log(data)
-
-  }
+      const itemObj = { title, price, quantity, description, category, image };
+      console.log(itemObj)
+      const { data } = await axios.post(
+        "http://localhost:3000/api/addproduct",
+        itemObj
+      );
+      console.log(data);
+    }
+  };
 
   return (
     <div className="bg-[#F2F4F8] p-[1rem]">
@@ -111,13 +120,14 @@ const Handler = () => {
                   Description
                 </label>{" "}
                 <br />
-                <textarea name="description" id="description" className="w-[60%] max-h-[13vh] rounded-md py-[.1rem] px-[.3rem] border border-[#039C46] text-[#039C46] focus:outline-none" />
+                <textarea
+                  name="description"
+                  id="description"
+                  className="w-[60%] max-h-[13vh] rounded-md py-[.1rem] px-[.3rem] border border-[#039C46] text-[#039C46] focus:outline-none"
+                />
               </div>
-              <div>
-                <label
-                  htmlFor="title"
-                  className="text-[#039C46] text-[1.2rem] mr-[1rem]"
-                >
+              <div className="mb-[1rem]">
+                <label htmlFor="title" className="text-[#039C46] text-[1.2rem]">
                   Image
                 </label>{" "}
                 <br />
@@ -161,8 +171,56 @@ const Handler = () => {
                   </div>
                 )}
               </div>
+              <div>
+                <span className="text-[#039C46] text-[1.2rem]">Category: </span>
+                <span
+                  onClick={() => setCategory("phone")}
+                  className={`text-[#039C46] border px-[.5rem] py-[.2rem] cursor-pointer mr-[.5rem] ${
+                    categoryText === "phone"
+                      ? "border-[#039C46]"
+                      : "border-[#E0E0E0]"
+                  }`}
+                >
+                  phone
+                </span>
+                <span
+                  onClick={() => setCategory("headphone")}
+                  className={`text-[#039C46] border px-[.5rem] py-[.2rem] cursor-pointer mr-[.5rem] ${
+                    categoryText === "headphone"
+                      ? "border-[#039C46]"
+                      : "border-[#E0E0E0]"
+                  }`}
+                >
+                  headphone
+                </span>
+                <span
+                  onClick={() => setCategory("airbuds")}
+                  className={`text-[#039C46] border px-[.5rem] py-[.2rem] cursor-pointer mr-[.5rem] ${
+                    categoryText === "airbuds"
+                      ? "border-[#039C46]"
+                      : "border-[#E0E0E0]"
+                  }`}
+                >
+                  airbuds
+                </span>
+                <span
+                  onClick={() => setCategory("watch")}
+                  className={`text-[#039C46] border px-[.5rem] py-[.2rem] cursor-pointer mr-[.5rem] ${
+                    categoryText === "watch"
+                      ? "border-[#039C46]"
+                      : "border-[#E0E0E0]"
+                  }`}
+                >
+                  watch
+                </span>
+              </div>
               <div className="mt-[2rem]">
-                <button type="submit" className="bg-[#039C46] text-white px-[2.5rem] py-[.6rem] rounded-[.3rem] text-[1.1rem] hover:bg-[#008238] transition-all">Submit</button>
+                <button
+                  type="submit"
+                  className="bg-[#039C46] text-white px-[2.5rem] py-[.6rem] rounded-[.3rem] text-[1.1rem] hover:bg-[#008238] transition-all"
+                >
+                  Submit
+                </button>
               </div>
             </form>
           </div>
