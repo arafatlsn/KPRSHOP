@@ -1,11 +1,9 @@
 import { PuffLoader } from "react-spinners";
 
-const SpinnerComp = () => {
+const SpinnerComp = ({ color, size }) => {
   return (
-    <div className="absolute top-[35%] w-[100%] h-[100%] flex justify-center">
-      <div className="flex flex-col items-center w-fit h-fit animate__animated animate__flipInX">
-        <PuffLoader size={35} color="#039C46" />
-      </div>
+    <div className="flex flex-col items-center w-fit h-fit mx-auto animate__animated animate__flipInX">
+      <PuffLoader size={size} color={color} />
     </div>
   );
 };

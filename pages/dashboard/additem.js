@@ -1,16 +1,24 @@
 import DashboardMenu from "../../Components/DashboardMenu";
 import { BsPlusSquareDotted } from "react-icons/bs";
 import { MdOutlineCancel } from "react-icons/md";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import defaultImage from "../../public/placeholder.jpg";
 import SpinnerComp from "../../Components/SpinnerComp";
 import axios from "axios";
+import { ProductContext } from "../_app";
 
 const Handler = () => {
+  const { setActiveMenu } = useContext(ProductContext);
   const [uploadImageUrl, setUploadImageUrl] = useState("");
   const [isLoading, setIsloadin] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [categoryText, setCategory] = useState("");
+
+
+  useEffect(() => {
+    setActiveMenu("Add New Item")
+  }, [])
 
   // upload image imagebb
   const uploadImage = async (e) => {
@@ -35,22 +43,28 @@ const Handler = () => {
     e.preventDefault();
 
     if (!categoryText || !uploadImageUrl) {
-      alert("please fill right way")
+      alert("please fill right way");
     } else {
+      setSubmitLoading(true);
       const title = e.target.title.value;
       const price = e.target.price.value;
       const quantity = e.target.quantity.value;
       const description = e.target.description.value;
-      const category = categoryText
+      const category = categoryText;
       const image = uploadImageUrl;
 
       const itemObj = { title, price, quantity, description, category, image };
-      console.log(itemObj)
+      console.log(itemObj);
       const { data } = await axios.post(
         "http://localhost:3000/api/addproduct",
         itemObj
       );
-      console.log(data);
+      setSubmitLoading(false);
+      if (data._id) {
+        setUploadImageUrl("");
+        setCategory("");
+        e.target.reset();
+      }
     }
   };
 
@@ -58,11 +72,11 @@ const Handler = () => {
     <div className="bg-[#F2F4F8] p-[1rem]">
       <div className="w-[55%] mx-auto flex justify-between gap-[1.5rem]">
         {/* add items left side  */}
-        <div className="w-[30%] bg-[white] p-[.5rem] rounded-md">
+        <div className="min-w-[30%] bg-[white] p-[.5rem] rounded-md">
           <DashboardMenu />
         </div>
         {/* add item right side  */}
-        <div className="bg-white w-[70%] h-[70vh] rounded-md p-[1rem]">
+        <div className="bg-white min-w-[70%] h-[70vh] rounded-md p-[1rem]">
           <div>
             <form onSubmit={addProduct}>
               <div className="mb-[1rem]">
@@ -123,7 +137,7 @@ const Handler = () => {
                 <textarea
                   name="description"
                   id="description"
-                  className="w-[60%] max-h-[13vh] rounded-md py-[.1rem] px-[.3rem] border border-[#039C46] text-[#039C46] focus:outline-none"
+                  className="w-[60%] max-h-[10vh] rounded-md py-[.1rem] px-[.3rem] border border-[#039C46] text-[#039C46] focus:outline-none"
                 />
               </div>
               <div className="mb-[1rem]">
@@ -153,7 +167,11 @@ const Handler = () => {
                         <div className="w-[100%] absolute z-[500] top-[40%] flex justify-center">
                           <BsPlusSquareDotted className="text-[1.5rem] text-[#039C46]" />
                         </div>
-                        {isLoading && <SpinnerComp />}
+                        {isLoading && (
+                          <div className="absolute top-[35%] w-[100%] h-[100%] flex justify-center">
+                            <SpinnerComp color="#039C46" size={35} />
+                          </div>
+                        )}
                       </div>
                     </label>
                   </div>
@@ -217,9 +235,18 @@ const Handler = () => {
               <div className="mt-[2rem]">
                 <button
                   type="submit"
-                  className="bg-[#039C46] text-white px-[2.5rem] py-[.6rem] rounded-[.3rem] text-[1.1rem] hover:bg-[#008238] transition-all"
+                  className="bg-[#039C46] text-white px-[2.5rem] py-[.6rem] rounded-[.3rem] text-[1.1rem] hover:bg-[#008238] transition-all relative flex justify-center"
                 >
-                  Submit
+                  <span className={`${submitLoading && "invisible"}`}>
+                    Submit
+                  </span>{" "}
+                  {submitLoading && (
+                    <div className="absolute top-[10%]">
+                      <div className="absolute top-[35%] w-[100%] h-[100%] flex justify-center">
+                        <SpinnerComp color="#fff" size={35} />
+                      </div>
+                    </div>
+                  )}
                 </button>
               </div>
             </form>

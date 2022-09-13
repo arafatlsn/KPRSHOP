@@ -5,7 +5,7 @@ const dbConnect = () => {
   .connect(process.env.DB_URL)
   .then(() => console.log("DB Connected"))
   .catch((error) => console.l
-  (error.message))
+  ("error message", error.message))
 }
 
 export default dbConnect;

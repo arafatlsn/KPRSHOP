@@ -1,0 +1,8 @@
+#cartUi{
+  visibility: hidden;
+  transition: visibility .1s ease;
+}
+
+#cartButton:hover #cartUi{
+  visibility: visible;
+}
