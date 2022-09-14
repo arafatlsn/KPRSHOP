@@ -15,10 +15,9 @@ const Handler = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [categoryText, setCategory] = useState("");
 
-
   useEffect(() => {
-    setActiveMenu("Add New Item")
-  }, [])
+    setActiveMenu("Add New Item");
+  }, []);
 
   // upload image imagebb
   const uploadImage = async (e) => {
@@ -56,7 +55,7 @@ const Handler = () => {
       const itemObj = { title, price, quantity, description, category, image };
       console.log(itemObj);
       const { data } = await axios.post(
-        "http://localhost:3000/api/addproduct",
+        "https://kpr-shop.vercel.app/api/addproduct",
         itemObj
       );
       setSubmitLoading(false);

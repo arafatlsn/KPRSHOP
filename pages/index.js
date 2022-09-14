@@ -1,9 +1,6 @@
-import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import HomepageFilter from "../Components/HomepageFilter";
 import Cards from "../Components/Homepage/Cards";
-import Footer from "../Components/Footer";
 import { useContext, useEffect, useState } from "react";
 import { ProductContext } from "./_app";
 
@@ -59,7 +56,7 @@ export default function Home({ data }) {
 }
 
 export async function getServerSideProps() {
-  const res = await fetch("http://localhost:3000/api/addproduct");
+  const res = await fetch("https://kpr-shop.vercel.app/api/addproduct");
   const data = await res.json();
   return {
     props: {
